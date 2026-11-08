@@ -1,0 +1,64 @@
+@model List<Responsibility>
+@{ ViewData["Title"] = "Responsibilities"; }
+
+<h1>Responsibilities</h1>
+<p><a asp-action="Create" class="btn btn-primary">New responsibility</a></p>
+
+@if (!Model.Any())
+{
+    <p>No responsibilities yet.</p>
+}
+
+@foreach (var r in Model)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h5 class="card-title">@r.Title</h5>
+                <span class="text-muted">
+                    @(r.DueDate.HasValue ? "Due " + r.DueDate.Value.ToString("dd MMM yyyy") : "No due date")
+                </span>
+            </div>
+            <p class="card-text">@r.Description</p>
+
+            @if (r.Assignments.Any())
+            {
+                <table class="table table-sm align-middle">
+                    <thead><tr><th>Assigned to</th><th>Status</th></tr></thead>
+                    <tbody>
+                    @foreach (var a in r.Assignments)
+                    {
+                        <tr>
+                            <td>@a.Person?.FullName</td>
+                            <td>
+                                <form asp-action="UpdateStatus" method="post" class="d-flex gap-2">
+                                    <input type="hidden" name="id" value="@a.Id" />
+                                    <select name="status" class="form-select form-select-sm w-auto">
+                                        @foreach (var s in Enum.GetValues<AssignmentStatus>())
+                                        {
+                                            <option value="@s" selected="@(a.Status == s)">@s</option>
+                                        }
+                                    </select>
+                                    <button class="btn btn-sm btn-outline-secondary">Update</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">Nobody assigned yet.</p>
+            }
+
+            <div class="d-flex gap-3 align-items-center">
+                <a asp-action="Assign" asp-route-id="@r.Id">Assign a person</a>
+                <form asp-action="Delete" asp-route-id="@r.Id" method="post"
+                      onsubmit="return confirm('Delete this responsibility and its assignments?');">
+                    <button class="btn btn-link text-danger p-0">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
