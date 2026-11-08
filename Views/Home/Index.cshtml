@@ -1,8 +1,107 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model DashboardViewModel
+@{ ViewData["Title"] = "Dashboard"; }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="display-6">@Model.TotalPeople</div>
+                <div class="text-muted">Active people</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="display-6">@Model.StaffCount</div>
+                <div class="text-muted">Staff</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="display-6">@Model.VolunteerCount</div>
+                <div class="text-muted">Volunteers</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="display-6">@Model.AttendanceRate%</div>
+                <div class="text-muted">Attendance today</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Today's attendance</h5>
+                @if (Model.TodayRecorded == 0)
+                {
+                    <p class="text-muted">Nothing recorded yet. <a asp-controller="Attendance" asp-action="Index">Take attendance</a></p>
+                }
+                else
+                {
+                    <div class="progress mb-3" style="height: 24px;">
+                        <div class="progress-bar bg-success" style="width: @(Model.TodayPresent * 100 / Model.TodayRecorded)%">@Model.TodayPresent</div>
+                        <div class="progress-bar bg-warning text-dark" style="width: @(Model.TodayLate * 100 / Model.TodayRecorded)%">@Model.TodayLate</div>
+                        <div class="progress-bar bg-danger" style="width: @(Model.TodayAbsent * 100 / Model.TodayRecorded)%">@Model.TodayAbsent</div>
+                    </div>
+                    <span class="badge bg-success">Present: @Model.TodayPresent</span>
+                    <span class="badge bg-warning text-dark">Late: @Model.TodayLate</span>
+                    <span class="badge bg-danger">Absent: @Model.TodayAbsent</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Task progress</h5>
+                <ul class="list-group list-group-flush mb-2">
+                    <li class="list-group-item d-flex justify-content-between">Pending <span class="badge bg-secondary">@Model.TasksPending</span></li>
+                    <li class="list-group-item d-flex justify-content-between">In progress <span class="badge bg-primary">@Model.TasksInProgress</span></li>
+                    <li class="list-group-item d-flex justify-content-between">Done <span class="badge bg-success">@Model.TasksDone</span></li>
+                </ul>
+                <a asp-controller="Responsibilities" asp-action="Index">View responsibilities</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Recently added</h5>
+                @if (!Model.RecentPeople.Any())
+                {
+                    <p class="text-muted">No people yet.</p>
+                }
+                else
+                {
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>Name</th><th>Type</th><th>Department</th><th>Joined</th></tr></thead>
+                        <tbody>
+                        @foreach (var p in Model.RecentPeople)
+                        {
+                            <tr>
+                                <td><a asp-controller="People" asp-action="Details" asp-route-id="@p.Id">@p.FullName</a></td>
+                                <td>@p.Type</td>
+                                <td>@p.Department</td>
+                                <td>@p.JoinDate.ToString("dd MMM yyyy")</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
 </div>
