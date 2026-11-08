@@ -1,0 +1,16 @@
+@model Person
+@{ ViewData["Title"] = "Details"; }
+
+<h1>@Model.FullName</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Email</dt><dd class="col-sm-9">@Model.Email</dd>
+    <dt class="col-sm-3">Phone</dt><dd class="col-sm-9">@Model.Phone</dd>
+    <dt class="col-sm-3">Type</dt><dd class="col-sm-9">@Model.Type</dd>
+    <dt class="col-sm-3">Department</dt><dd class="col-sm-9">@Model.Department</dd>
+    <dt class="col-sm-3">Joined</dt><dd class="col-sm-9">@Model.JoinDate.ToString("dd MMM yyyy")</dd>
+    <dt class="col-sm-3">Active</dt><dd class="col-sm-9">@(Model.IsActive ? "Yes" : "No")</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-link">Back to list</a>

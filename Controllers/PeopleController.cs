@@ -25,6 +25,14 @@ public class PeopleController : Controller
         return View(await query.OrderBy(p => p.FullName).ToListAsync());
     }
 
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null) return NotFound();
+        var person = await _db.People.FirstOrDefaultAsync(p => p.Id == id);
+        if (person == null) return NotFound();
+        return View(person);
+    }
+
     public IActionResult Create() => View();
 
     [HttpPost, ValidateAntiForgeryToken]
@@ -34,6 +42,45 @@ public class PeopleController : Controller
 
         _db.People.Add(person);
         await _db.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+        var person = await _db.People.FindAsync(id);
+        if (person == null) return NotFound();
+        return View(person);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Person person)
+    {
+        if (id != person.Id) return NotFound();
+        if (!ModelState.IsValid) return View(person);
+
+        _db.Update(person);
+        await _db.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+        var person = await _db.People.FirstOrDefaultAsync(p => p.Id == id);
+        if (person == null) return NotFound();
+        return View(person);
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var person = await _db.People.FindAsync(id);
+        if (person != null)
+        {
+            _db.People.Remove(person);
+            await _db.SaveChangesAsync();
+        }
         return RedirectToAction(nameof(Index));
     }
 }
