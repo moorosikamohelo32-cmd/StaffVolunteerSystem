@@ -1,0 +1,40 @@
+@model List<Person>
+@{ ViewData["Title"] = "Staff & Volunteers"; }
+
+<h1>Staff &amp; Volunteers</h1>
+
+<p><a asp-action="Create" class="btn btn-primary">Add person</a></p>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input name="search" value="@ViewData["Search"]" class="form-control" placeholder="Search name or email" />
+    </div>
+    <div class="col-auto">
+        <select name="type" class="form-select">
+            <option value="">All types</option>
+            <option value="Staff">Staff</option>
+            <option value="Volunteer">Volunteer</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-outline-secondary">Filter</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr><th>Name</th><th>Email</th><th>Type</th><th>Department</th><th>Joined</th></tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.FullName</td>
+            <td>@p.Email</td>
+            <td>@p.Type</td>
+            <td>@p.Department</td>
+            <td>@p.JoinDate.ToString("dd MMM yyyy")</td>
+        </tr>
+    }
+    </tbody>
+</table>
