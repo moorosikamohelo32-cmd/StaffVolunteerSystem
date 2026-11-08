@@ -1,0 +1,56 @@
+@model AttendancePageViewModel
+@{ ViewData["Title"] = "Attendance"; }
+
+<h1>Attendance</h1>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input type="date" name="date" value="@Model.Date.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-outline-secondary">Go</button>
+    </div>
+</form>
+
+@if (TempData["Saved"] != null)
+{
+    <div class="alert alert-success">@TempData["Saved"]</div>
+}
+
+@if (!Model.Rows.Any())
+{
+    <p>No active people yet. <a asp-controller="People" asp-action="Create">Add someone</a> first.</p>
+}
+else
+{
+    <form asp-action="Save" method="post">
+        <input type="hidden" name="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr><th>Name</th><th>Type</th><th>Status</th><th>Recorded</th><th></th></tr>
+            </thead>
+            <tbody>
+            @for (int i = 0; i < Model.Rows.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Model.Rows[i].FullName
+                        <input type="hidden" asp-for="Rows[i].PersonId" />
+                    </td>
+                    <td>@Model.Rows[i].Type</td>
+                    <td>
+                        <select asp-for="Rows[i].Status"
+                                asp-items="Html.GetEnumSelectList<AttendanceStatus>()"
+                                class="form-select form-select-sm"></select>
+                    </td>
+                    <td>@(Model.Rows[i].Recorded ? "Saved" : "Not yet")</td>
+                    <td><a asp-action="History" asp-route-id="@Model.Rows[i].PersonId">History</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-primary">Save attendance</button>
+    </form>
+}

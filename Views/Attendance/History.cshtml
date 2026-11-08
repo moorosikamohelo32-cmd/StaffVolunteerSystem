@@ -1,0 +1,37 @@
+@model Person
+@{
+    ViewData["Title"] = "Attendance history";
+    var records = Model.Attendance.OrderByDescending(a => a.Date).ToList();
+    var present = records.Count(a => a.Status == AttendanceStatus.Present);
+    var late = records.Count(a => a.Status == AttendanceStatus.Late);
+    var absent = records.Count(a => a.Status == AttendanceStatus.Absent);
+}
+
+<h1>@Model.FullName</h1>
+<p>
+    <span class="badge bg-success">Present: @present</span>
+    <span class="badge bg-warning text-dark">Late: @late</span>
+    <span class="badge bg-danger">Absent: @absent</span>
+</p>
+
+@if (!records.Any())
+{
+    <p>No attendance recorded yet.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead><tr><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+        @foreach (var r in records)
+        {
+            <tr>
+                <td>@r.Date.ToString("dd MMM yyyy")</td>
+                <td>@r.Status</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Index" class="btn btn-link">Back to attendance</a>
