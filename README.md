@@ -29,12 +29,11 @@ A web application for registering staff and volunteers, managing their profiles,
 ## Getting started
 
 ```bash
-git clone https://github.com/[your-username]/StaffVolunteerSystem.git
+git clone https://github.com/moorosikamohelo32-cmd/StaffVolunteerSystem.git
 cd StaffVolunteerSystem
 dotnet ef database update
 dotnet run
 ```
-
 Then open the URL shown in the terminal (for example http://localhost:5298).
 
 ## Project structure
@@ -53,4 +52,4 @@ Then open the URL shown in the terminal (for example http://localhost:5298).
 
 ## Author
 
-[Your name] | [your email or LinkedIn]
+[Kamohelo Moorosi] | [moorosikamohelo32@gmail.com]
