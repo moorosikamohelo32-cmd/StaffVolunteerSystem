@@ -1,7 +1,7 @@
 ﻿@model DashboardViewModel
 @{ ViewData["Title"] = "Dashboard"; }
 
-<h1 class="mb-4">Dashboard</h1>
+<h1>Dashboard</h1>
 
 <div class="row g-3 mb-4">
     <div class="col-6 col-lg-3">
@@ -26,31 +26,6 @@
         <div class="stat-card">
             <div class="stat-icon green"><i class="bi bi-check2-circle"></i></div>
             <div><div class="stat-value">@Model.AttendanceRate%</div><div class="stat-label">Attendance today</div></div>
-        </div>
-    </div>
-</div>
-    <div class="col-6 col-md-3">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <div class="display-6">@Model.StaffCount</div>
-                <div class="text-muted">Staff</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <div class="display-6">@Model.VolunteerCount</div>
-                <div class="text-muted">Volunteers</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <div class="display-6">@Model.AttendanceRate%</div>
-                <div class="text-muted">Attendance today</div>
-            </div>
         </div>
     </div>
 </div>
@@ -110,7 +85,7 @@
                         {
                             <tr>
                                 <td><a asp-controller="People" asp-action="Details" asp-route-id="@p.Id">@p.FullName</a></td>
-                                <td>@p.Type</td>
+                                <td><span class="badge @(p.Type == PersonType.Staff ? "badge-staff" : "badge-volunteer")">@p.Type</span></td>
                                 <td>@p.Department</td>
                                 <td>@p.JoinDate.ToString("dd MMM yyyy")</td>
                             </tr>
