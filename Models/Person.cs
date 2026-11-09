@@ -8,6 +8,7 @@ public class Person
 {
     public int Id { get; set; }
 
+    [Display(Name = "Full name")]
     [Required, StringLength(100)]
     public string FullName { get; set; } = "";
 
@@ -21,6 +22,7 @@ public class Person
 
     public string? Department { get; set; }
 
+     [Display(Name = "Join date")]
     public DateTime JoinDate { get; set; } = DateTime.Today;
 
     public bool IsActive { get; set; } = true;

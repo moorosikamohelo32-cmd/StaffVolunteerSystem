@@ -33,7 +33,7 @@ public class PeopleController : Controller
         return View(person);
     }
 
-    public IActionResult Create() => View();
+    public IActionResult Create() => View(new Person());
 
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Person person)
